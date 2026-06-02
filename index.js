@@ -59,6 +59,28 @@ app.command("/gst-echo", async ({ command, ack, respond }) => {
   await respond({ text, response_type: "in_channel" });
 });
 
+app.command("/gst-whitelist", async ({ command, ack, respond, client }) => {
+  await ack();
+  console.log("caller:", command.user_id);
+
+  if (!WHITELIST.includes(command.user_id)) {
+    await respond({ text: "You're not whitelisted for this command." });
+    return;
+  }
+
+  const lines = await Promise.all(WHITELIST.map(async (id) => {
+    try {
+      const info = await client.users.info({ user: id });
+      const name = info.user?.profile?.display_name || info.user?.real_name || info.user?.name || "unknown";
+      return `• ${name} (${id})`;
+    } catch (err) {
+      return `• unknown (${id})`;
+    }
+  }));
+
+  await respond({ text: `Whitelisted users:\n${lines.join("\n")}` });
+});
+
 (async () => {
   await app.start();
   console.log("bot is running!");
