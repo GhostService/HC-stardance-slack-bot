@@ -9,13 +9,6 @@ const app = new App({
   socketMode: true
 });
 
-app.command("/gst-ping", async ({ command, ack, respond }) => {
-  const start = Date.now();
-  await ack();
-  const latency = Date.now() - start;
-  await respond({ text: `Ping successful!\nLatency: ${latency}ms` });
-});
-
 app.command("/gst-help", async ({ ack, respond }) => {
   await ack();
   await respond({
@@ -25,6 +18,13 @@ app.command("/gst-help", async ({ ack, respond }) => {
 /gst-ping - Checks bot status and latency
 /gst-fact - Useless unfunny facts`
   });
+});
+
+app.command("/gst-ping", async ({ command, ack, respond }) => {
+  const start = Date.now();
+  await ack();
+  const latency = Date.now() - start;
+  await respond({ text: `Ping successful!\nLatency: ${latency}ms` });
 });
 
 app.command("/gst-fact", async ({ ack, respond }) => {
