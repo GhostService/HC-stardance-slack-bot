@@ -9,6 +9,8 @@ const app = new App({
   socketMode: true
 });
 
+const WHITELIST = (process.env.GST_WHITELIST || "").split(",").map(s => s.trim()).filter(Boolean);
+
 app.command("/gst-help", async ({ ack, respond }) => {
   await ack();
   await respond({
@@ -16,7 +18,8 @@ app.command("/gst-help", async ({ ack, respond }) => {
 `Available Commands:
 /gst-help - This command of course
 /gst-ping - Checks bot status and latency
-/gst-fact - Useless unfunny facts`
+/gst-fact - Useless unfunny facts
+/gst-echo - Echoes your message (whitelisted)`
   });
 });
 
@@ -32,10 +35,28 @@ app.command("/gst-fact", async ({ ack, respond }) => {
 
   try {
     const response = await axios.get("https://uselessfacts.jsph.pl/api/v2/facts/random");
-    await respond({ text: `Since you asked...\n${response.data.text}\nThank ${response.data.source} for this unfunny fact.` });
+    await respond({ text: `Since you asked...\n${response.data.text}\nThank ${response.data.source} for this unfunny fact.`, response_type: "in_channel" });
   } catch (err) {
     await respond({ text: "Larp failed. Try again later." });
   }
+});
+
+app.command("/gst-echo", async ({ command, ack, respond }) => {
+  await ack();
+  console.log("caller:", command.user_id);
+
+  if (!WHITELIST.includes(command.user_id)) {
+    await respond({ text: "You're not whitelisted for this command." });
+    return;
+  }
+
+  const text = command.text?.trim();
+  if (!text) {
+    await respond({ text: "Usage: /gst-echo <message>" });
+    return;
+  }
+
+  await respond({ text, response_type: "in_channel" });
 });
 
 (async () => {
