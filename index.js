@@ -19,7 +19,8 @@ app.command("/gst-help", async ({ ack, respond }) => {
 /gst-help - This command of course
 /gst-ping - Checks bot status and latency
 /gst-fact - Useless unfunny facts
-/gst-echo - Echoes your message (whitelisted)`
+/gst-echo - Echoes your message (whitelisted)
+/gst-whitelist - Lists all whitelisted users and their slack IDs.`
   });
 });
 

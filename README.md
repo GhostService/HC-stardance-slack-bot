@@ -1,6 +1,12 @@
 **My First Slack Bot**
 
-This project was made for Hack Club's *Stardance* YSWS program.
+This project was made for Hack Club's *Stardance* YSWS program. Its just a basic bot with random features for the most part. Here is the full list of features pasted from my `index.js`.
+
+`/gst-help - This command of course
+/gst-ping - Checks bot status and latency
+/gst-fact - Useless unfunny facts
+/gst-echo - Echoes your message (whitelisted)
+/gst-whitelist - Lists all whitelisted users and their slack IDs.`
 
 **Prereqs**
 
